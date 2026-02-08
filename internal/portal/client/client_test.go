@@ -14,9 +14,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gmssh/gmssh/internal/portal/protocol"
-	"github.com/gmssh/gmssh/pkg/portal"
-	"github.com/gmssh/gmssh/pkg/types"
+	"github.com/luobobo896/HSSH/internal/portal/protocol"
+	"github.com/luobobo896/HSSH/pkg/portal"
+	"github.com/luobobo896/HSSH/pkg/types"
 )
 
 // generateTestTLSConfig generates a self-signed TLS certificate for testing

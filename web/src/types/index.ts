@@ -80,6 +80,7 @@ export interface PortMapping {
   via?: string[];
   protocol: PortalProtocol;
   enabled: boolean;
+  portal_server?: string;
   active?: boolean;
   connection_count?: number;
   bytes_transferred?: number;

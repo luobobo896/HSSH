@@ -16,14 +16,14 @@ function App() {
       <div className="orb orb-3"></div>
 
       {/* Navigation */}
-      <nav className="glass-card mx-4 mt-4 !p-0">
+      <nav className="glass-card mx-4 mt-4 p-0">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex h-12 items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-accent-pink to-accent-purple flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white font-bold text-sm">
                 ◆
               </div>
-              <span className="text-[15px] font-semibold text-white">GMSSH</span>
+              <span className="text-md font-semibold text-primary">HSSH</span>
             </div>
             <div className="flex gap-1">
               <button

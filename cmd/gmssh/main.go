@@ -6,9 +6,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gmssh/gmssh/internal/api"
-	"github.com/gmssh/gmssh/internal/cli"
-	"github.com/gmssh/gmssh/pkg/types"
+	"github.com/luobobo896/HSSH/internal/api"
+	"github.com/luobobo896/HSSH/internal/cli"
+	"github.com/luobobo896/HSSH/pkg/types"
 )
 
 func main() {
@@ -221,10 +221,10 @@ func main() {
 }
 
 func printUsage() {
-	fmt.Println("GMSSH - High-performance SSH bastion tool")
+	fmt.Println("HSSH - High-performance SSH bastion tool")
 	fmt.Println()
 	fmt.Println("Usage:")
-	fmt.Println("  gmssh <command> [options]")
+	fmt.Println("  hssh <command> [options]")
 	fmt.Println()
 	fmt.Println("Commands:")
 	fmt.Println("  upload    Upload file to remote server")
@@ -271,20 +271,20 @@ func printUsage() {
 	fmt.Println()
 	fmt.Println("Examples:")
 	fmt.Println("  # Upload file directly")
-	fmt.Println("  gmssh upload --source ./file.txt --target gateway:/data/")
+	fmt.Println("  hssh upload --source ./file.txt --target gateway:/data/")
 	fmt.Println()
 	fmt.Println("  # Upload via bastion")
-	fmt.Println("  gmssh upload --source ./file.txt --target internal:/data/ --via bastion-hk,gateway")
+	fmt.Println("  hssh upload --source ./file.txt --target internal:/data/ --via bastion-hk,gateway")
 	fmt.Println()
 	fmt.Println("  # Port forward to internal database")
-	fmt.Println("  gmssh proxy --local :3306 --remote-host internal-db --remote-port 3306 --via gateway")
+	fmt.Println("  hssh proxy --local :3306 --remote-host internal-db --remote-port 3306 --via gateway")
 	fmt.Println()
 	fmt.Println("  # Add a server")
-	fmt.Println("  gmssh server add --name gateway --host gw.example.com --user admin --auth key --key-path ~/.ssh/id_rsa")
+	fmt.Println("  hssh server add --name gateway --host gw.example.com --user admin --auth key --key-path ~/.ssh/id_rsa")
 	fmt.Println()
 	fmt.Println("  # Start portal server")
-	fmt.Println("  gmssh portal --server --listen :18888 --token my-token")
+	fmt.Println("  hssh portal --server --listen :18888 --token my-token")
 	fmt.Println()
 	fmt.Println("  # Start portal client")
-	fmt.Println("  gmssh portal --client --local :8080 --remote 192.168.1.10:80 --server-addr portal.example.com:18888")
+	fmt.Println("  hssh portal --client --local :8080 --remote 192.168.1.10:80 --server-addr portal.example.com:18888")
 }

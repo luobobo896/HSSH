@@ -10,8 +10,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/gmssh/gmssh/internal/portal/protocol"
-	"github.com/gmssh/gmssh/pkg/portal"
+	"github.com/luobobo896/HSSH/internal/portal/protocol"
+	"github.com/luobobo896/HSSH/pkg/portal"
 )
 
 // Client portal client

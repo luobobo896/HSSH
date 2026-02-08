@@ -269,6 +269,8 @@ type PortMapping struct {
 	Via        []string       `json:"via" yaml:"via"`
 	Protocol   PortalProtocol `json:"protocol" yaml:"protocol"`
 	Enabled    bool           `json:"enabled" yaml:"enabled"`
+	// PortalServer 是 GMPortal 服务端地址，如果为空则使用 Via 中的第一个外网服务器
+	PortalServer string `json:"portal_server,omitempty" yaml:"portal_server,omitempty"`
 }
 
 // PortalTokenConfig Token 认证配置

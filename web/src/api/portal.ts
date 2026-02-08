@@ -17,6 +17,7 @@ export interface CreateMappingRequest {
   remote_port: number;
   via?: string[];
   protocol?: string;
+  portal_server?: string;
 }
 
 export async function getPortalStatus(): Promise<PortalStatus> {
@@ -36,4 +37,17 @@ export async function createMapping(request: CreateMappingRequest): Promise<Port
 
 export async function deleteMapping(id: string): Promise<void> {
   await client.delete(`/portal/mappings/${id}`);
+}
+
+export async function startMapping(id: string): Promise<void> {
+  await client.post(`/portal/mappings/${id}/start`);
+}
+
+export async function stopMapping(id: string): Promise<void> {
+  await client.post(`/portal/mappings/${id}/stop`);
+}
+
+export async function updateMapping(id: string, request: Partial<CreateMappingRequest>): Promise<PortMapping> {
+  const response = await client.put(`/portal/mappings/${id}`, request);
+  return response.data;
 }

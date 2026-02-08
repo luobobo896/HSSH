@@ -21,9 +21,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gmssh/gmssh/internal/portal/client"
-	"github.com/gmssh/gmssh/internal/portal/server"
-	"github.com/gmssh/gmssh/pkg/portal"
+	"github.com/luobobo896/HSSH/internal/portal/client"
+	"github.com/luobobo896/HSSH/internal/portal/server"
+	"github.com/luobobo896/HSSH/pkg/portal"
 	"github.com/google/uuid"
 )
 
@@ -59,7 +59,7 @@ func (c *PortalCommand) Synopsis() string {
 
 // Usage returns detailed usage
 func (c *PortalCommand) Usage() string {
-	return `Usage: gmssh portal [options]
+	return `Usage: hssh portal [options]
 
 Options:
   --server          以服务端模式运行
@@ -80,10 +80,10 @@ Client Mode:
 
 Examples:
   # 服务端模式
-  gmssh portal --server --listen :18888 --token "my-token"
+  hssh portal --server --listen :18888 --token "my-token"
 
   # 客户端模式 (单映射)
-  gmssh portal --client --local :8080 --remote 192.168.1.10:80 --server-addr portal.example.com:18888
+  hssh portal --client --local :8080 --remote 192.168.1.10:80 --server-addr portal.example.com:18888
 `
 }
 
@@ -303,7 +303,7 @@ func generateSelfSignedTLS() (*tls.Config, error) {
 	template := x509.Certificate{
 		SerialNumber: big.NewInt(1),
 		Subject: pkix.Name{
-			Organization: []string{"GMSSH Portal"},
+			Organization: []string{"HSSH Portal"},
 		},
 		NotBefore:             time.Now(),
 		NotAfter:              time.Now().Add(24 * time.Hour),

@@ -4,7 +4,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/gmssh/gmssh/pkg/portal"
+	"github.com/luobobo896/HSSH/pkg/portal"
 )
 
 // Manager manages multiple portal clients (one per server)

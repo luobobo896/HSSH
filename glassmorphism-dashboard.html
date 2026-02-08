@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glass Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-highlight: rgba(255, 255, 255, 0.25);
+            --text-primary: rgba(255, 255, 255, 0.95);
+            --text-secondary: rgba(255, 255, 255, 0.65);
+            --accent-pink: #ff6b9d;
+            --accent-purple: #c084fc;
+            --accent-blue: #60a5fa;
+            --accent-cyan: #22d3ee;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #e94560 100%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, #e94560, #533483);
+            top: -200px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #0f3460, #60a5fa);
+            bottom: -150px;
+            left: -100px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #c084fc, #ff6b9d);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(0, 50px) scale(0.95); }
+            75% { transform: translate(-50px, -25px) scale(1.05); }
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            margin-bottom: 3rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-pink), var(--accent-cyan));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border: 2px solid var(--glass-highlight);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .header-section h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 50%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-section p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Glass Card Base */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 var(--glass-highlight);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 var(--glass-highlight);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Card Sizes */
+        .card-large {
+            grid-column: span 8;
+        }
+
+        .card-medium {
+            grid-column: span 4;
+        }
+
+        .card-small {
+            grid-column: span 3;
+        }
+
+        .card-full {
+            grid-column: span 12;
+        }
+
+        /* Stats Card */
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+        }
+
+        .stat-icon.pink { background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(255, 107, 157, 0.1)); }
+        .stat-icon.purple { background: linear-gradient(135deg, rgba(192, 132, 252, 0.3), rgba(192, 132, 252, 0.1)); }
+        .stat-icon.blue { background: linear-gradient(135deg, rgba(96, 165, 250, 0.3), rgba(96, 165, 250, 0.1)); }
+        .stat-icon.cyan { background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(34, 211, 238, 0.1)); }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            background: rgba(34, 211, 238, 0.15);
+            color: var(--accent-cyan);
+        }
+
+        .stat-change.negative {
+            background: rgba(255, 107, 157, 0.15);
+            color: var(--accent-pink);
+        }
+
+        /* Chart Card */
+        .chart-container {
+            height: 300px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-top: 2rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
+            border-radius: 8px 8px 0 0;
+            opacity: 0.8;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .chart-bar:hover {
+            opacity: 1;
+            transform: scaleY(1.05);
+        }
+
+        .chart-bar::before {
+            content: attr(data-value);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chart-bar:hover::before {
+            opacity: 1;
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Activity Card */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .activity-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Glass Button */
+        .glass-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .glass-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-button.primary {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.4), rgba(192, 132, 252, 0.4));
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-button.primary:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.6), rgba(192, 132, 252, 0.6));
+        }
+
+        /* Progress Ring */
+        .progress-ring-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+
+        .progress-ring {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 12;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 110;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .progress-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .progress-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .progress-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Project Cards */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            padding: 1.5rem;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .project-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border: 1px solid var(--glass-border);
+        }
+
+        .project-menu {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .project-menu:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .project-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-members {
+            display: flex;
+            align-items: center;
+        }
+
+        .member-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin-left: -8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .member-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .project-status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(34, 211, 238, 0.15);
+            color: var(--accent-cyan);
+        }
+
+        .status-pending {
+            background: rgba(255, 107, 157, 0.15);
+            color: var(--accent-pink);
+        }
+
+        .status-completed {
+            background: rgba(74, 222, 128, 0.15);
+            color: #4ade80;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--accent-pink), var(--accent-cyan));
+            border-radius: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .card-large, .card-medium, .card-small {
+                grid-column: span 6;
+            }
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 2rem;
+            }
+            .card-large, .card-medium, .card-small {
+                grid-column: span 12;
+            }
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glass-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .glass-card:nth-child(1) { animation-delay: 0.1s; }
+        .glass-card:nth-child(2) { animation-delay: 0.2s; }
+        .glass-card:nth-child(3) { animation-delay: 0.3s; }
+        .glass-card:nth-child(4) { animation-delay: 0.4s; }
+        .glass-card:nth-child(5) { animation-delay: 0.5s; }
+        .glass-card:nth-child(6) { animation-delay: 0.6s; }
+        .glass-card:nth-child(7) { animation-delay: 0.7s; }
+        .glass-card:nth-child(8) { animation-delay: 0.8s; }
+    </style>
+</head>
+<body>
+    <!-- Background Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <div class="logo">◆ Glass UI</div>
+            <ul class="nav-links">
+                <li><a href="#">概览</a></li>
+                <li><a href="#">项目</a></li>
+                <li><a href="#">团队</a></li>
+                <li><a href="#">分析</a></li>
+            </ul>
+            <div class="user-avatar">JD</div>
+        </nav>
+
+        <!-- Header -->
+        <div class="header-section">
+            <h1>欢迎回来, John</h1>
+            <p>这是你今天的项目概览。你有 3 个进行中的项目和 12 个待处理任务。</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="dashboard-grid">
+            <!-- Stat Cards -->
+            <div class="glass-card card-small stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon pink">📊</div>
+                </div>
+                <div class="stat-value">2,847</div>
+                <div class="stat-label">总访问量</div>
+                <div class="stat-change">↑ 12.5%</div>
+            </div>
+
+            <div class="glass-card card-small stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon purple">💰</div>
+                </div>
+                <div class="stat-value">$48.2k</div>
+                <div class="stat-label">本月收入</div>
+                <div class="stat-change">↑ 8.2%</div>
+            </div>
+
+            <div class="glass-card card-small stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon blue">👥</div>
+                </div>
+                <div class="stat-value">1,429</div>
+                <div class="stat-label">活跃用户</div>
+                <div class="stat-change negative">↓ 3.1%</div>
+            </div>
+
+            <div class="glass-card card-small stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon cyan">⚡</div>
+                </div>
+                <div class="stat-value">98.9%</div>
+                <div class="stat-label">系统状态</div>
+                <div class="stat-change">正常运行</div>
+            </div>
+
+            <!-- Chart Card -->
+            <div class="glass-card card-large">
+                <h3 class="section-title">访问趋势</h3>
+                <div class="chart-container">
+                    <div class="chart-bar" style="height: 45%" data-value="450"></div>
+                    <div class="chart-bar" style="height: 62%" data-value="620"></div>
+                    <div class="chart-bar" style="height: 38%" data-value="380"></div>
+                    <div class="chart-bar" style="height: 75%" data-value="750"></div>
+                    <div class="chart-bar" style="height: 55%" data-value="550"></div>
+                    <div class="chart-bar" style="height: 85%" data-value="850"></div>
+                    <div class="chart-bar" style="height: 68%" data-value="680"></div>
+                </div>
+                <div class="chart-labels">
+                    <span>周一</span>
+                    <span>周二</span>
+                    <span>周三</span>
+                    <span>周四</span>
+                    <span>周五</span>
+                    <span>周六</span>
+                    <span>周日</span>
+                </div>
+            </div>
+
+            <!-- Progress Ring Card -->
+            <div class="glass-card card-medium">
+                <h3 class="section-title">项目进度</h3>
+                <div class="progress-ring-container">
+                    <div class="progress-ring">
+                        <svg width="180" height="180">
+                            <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ff6b9d"/>
+                                    <stop offset="100%" style="stop-color:#22d3ee"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="progress-ring-bg" cx="90" cy="90" r="70"/>
+                            <circle class="progress-ring-fill" cx="90" cy="90" r="70"/>
+                        </svg>
+                        <div class="progress-content">
+                            <div class="progress-value">75%</div>
+                            <div class="progress-label">已完成</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Card -->
+            <div class="glass-card card-medium">
+                <h3 class="section-title">最近活动</h3>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-avatar" style="background: linear-gradient(135deg, #ff6b9d, #c084fc);">🎨</div>
+                        <div class="activity-content">
+                            <div class="activity-title">完成了设计评审</div>
+                            <div class="activity-time">2 小时前</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-avatar" style="background: linear-gradient(135deg, #60a5fa, #22d3ee);">💻</div>
+                        <div class="activity-content">
+                            <div class="activity-title">提交了代码更新</div>
+                            <div class="activity-time">4 小时前</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-avatar" style="background: linear-gradient(135deg, #4ade80, #22d3ee);">✅</div>
+                        <div class="activity-content">
+                            <div class="activity-title">发布了新版本 v2.4</div>
+                            <div class="activity-time">昨天</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-avatar" style="background: linear-gradient(135deg, #fbbf24, #ff6b9d);">🏆</div>
+                        <div class="activity-content">
+                            <div class="activity-title">获得了最佳项目奖</div>
+                            <div class="activity-time">2 天前</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="glass-card card-medium">
+                <h3 class="section-title">快速操作</h3>
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+                    <button class="glass-button primary">
+                        <span>+</span> 新建项目
+                    </button>
+                    <button class="glass-button">
+                        <span>📤</span> 上传文件
+                    </button>
+                    <button class="glass-button">
+                        <span>👤</span> 邀请成员
+                    </button>
+                    <button class="glass-button">
+                        <span>⚙️</span> 设置
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <h3 class="section-title">进行中的项目</h3>
+        <div class="projects-grid">
+            <div class="glass-card project-card">
+                <div class="project-header">
+                    <div class="project-icon">🎯</div>
+                    <div class="project-menu">⋮</div>
+                </div>
+                <div class="project-title">品牌重塑</div>
+                <div class="project-desc">全新视觉识别系统设计与落地实施</div>
+                <div class="project-footer">
+                    <div class="project-members">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #ff6b9d, #c084fc);">A</div>
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #60a5fa, #22d3ee);">B</div>
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #4ade80, #22d3ee);">C</div>
+                    </div>
+                    <div class="project-status status-active">进行中</div>
+                </div>
+            </div>
+
+            <div class="glass-card project-card">
+                <div class="project-header">
+                    <div class="project-icon">🚀</div>
+                    <div class="project-menu">⋮</div>
+                </div>
+                <div class="project-title">产品发布</div>
+                <div class="project-desc">Q1 新产品上线与市场推广计划</div>
+                <div class="project-footer">
+                    <div class="project-members">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #fbbf24, #ff6b9d);">D</div>
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #60a5fa, #c084fc);">E</div>
+                    </div>
+                    <div class="project-status status-pending">待开始</div>
+                </div>
+            </div>
+
+            <div class="glass-card project-card">
+                <div class="project-header">
+                    <div class="project-icon">📱</div>
+                    <div class="project-menu">⋮</div>
+                </div>
+                <div class="project-title">App 重构</div>
+                <div class="project-desc">移动端应用架构升级与性能优化</div>
+                <div class="project-footer">
+                    <div class="project-members">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #4ade80, #22d3ee);">F</div>
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #60a5fa, #22d3ee);">G</div>
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #fbbf24, #ff6b9d);">H</div>
+                        <div class="member-avatar" style="background: rgba(255,255,255,0.2);">+2</div>
+                    </div>
+                    <div class="project-status status-completed">已完成</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#ff6b9d"/>
+                <stop offset="100%" style="stop-color:#22d3ee"/>
+            </linearGradient>
+        </defs>
+    </svg>
+</body>
+</html>

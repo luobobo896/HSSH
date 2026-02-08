@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/gmssh/gmssh/pkg/portal"
+	"github.com/luobobo896/HSSH/pkg/portal"
 )
 
 // Authenticator handles token authentication

@@ -1,4 +1,4 @@
-module github.com/gmssh/gmssh
+module github.com/luobobo896/HSSH
 
 go 1.25.6
 

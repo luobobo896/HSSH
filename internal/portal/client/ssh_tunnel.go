@@ -5,8 +5,8 @@ import (
 	"log"
 	"net"
 
-	"github.com/gmssh/gmssh/internal/ssh"
-	"github.com/gmssh/gmssh/pkg/types"
+	"github.com/luobobo896/HSSH/internal/ssh"
+	"github.com/luobobo896/HSSH/pkg/types"
 )
 
 // SSHTunnel creates a tunnel through SSH chain to reach portal server
