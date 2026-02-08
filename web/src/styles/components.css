@@ -493,16 +493,14 @@
 .glass-modal-overlay {
   position: fixed;
   inset: 0;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   z-index: var(--z-modal-backdrop);
-  padding: var(--space-8) var(--space-4);
-  /* 遮罩层不参与滚动，仅作为背景 */
-  overflow: hidden;
-  /* 移除遮罩层阴影，仅保留背景半透明蒙层 */
-  box-shadow: none;
+  padding: var(--space-4);
+  /* 允许遮罩层在内容过高时滚动 */
+  overflow: auto;
 }
 
 .glass-modal {
@@ -511,13 +509,14 @@
   -webkit-backdrop-filter: blur(var(--blur-lg));
   border: 1px solid var(--glass-border-default);
   border-radius: var(--radius-xl);
+  /* 确保底部圆角可见 - 使用 overflow hidden 裁剪子元素 */
+  overflow: hidden;
   /* 移除底部阴影，改用玻璃态边框和背景 */
   box-shadow: none;
   width: 100%;
   max-width: 480px;
-  /* 限制最大高度，超出时内部滚动 */
-  max-height: calc(100vh - 64px);
-  overflow: hidden;
+  /* 限制最大高度为视口的85%，确保不会被挤出屏幕 */
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   z-index: var(--z-modal);
@@ -557,10 +556,13 @@
   color: var(--text-primary);
 }
 
+/* Base modal body - used when body is direct child of modal (no container) */
 .glass-modal-body {
   padding: var(--space-5);
   overflow-y: auto;
+  overflow-x: hidden;
   flex: 1;
+  min-height: 0;
 }
 
 .glass-modal-footer {
@@ -568,7 +570,14 @@
   gap: var(--space-3);
   padding: var(--space-4) var(--space-5);
   border-top: 1px solid var(--glass-border-default);
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  /* 确保 footer 始终在底部 */
+  margin-top: auto;
+  /* 底部圆角与弹窗容器一致 */
+  border-bottom-left-radius: var(--radius-xl);
+  border-bottom-right-radius: var(--radius-xl);
+  /* 背景色与弹窗一致，确保圆角可见 */
+  background: var(--glass-bg-modal);
 }
 
 /* --- 弹窗尺寸变体 (Modal Sizes) --- */
@@ -584,46 +593,84 @@
 
 .glass-modal-lg {
   max-width: var(--modal-width-lg);
-  max-height: calc(100vh - 160px);
+  /* 使用视口高度限制，确保在小屏幕上也能完整显示 */
+  max-height: min(800px, 90vh);
+  /* 确保子元素可以正确收缩 */
+  min-height: 0;
 }
 
-/* Modal container for proper flex layout with scrollable body */
+/* ============================================
+   Modal Flexbox Layout - Sticky Footer Pattern
+   ============================================ */
+
+/* Modal container: Flexbox column layout with constrained height */
 .glass-modal-container {
   display: flex;
   flex-direction: column;
   flex: 1;
+  /* Critical: min-height: 0 allows flex item to shrink below content size */
   min-height: 0;
+  /* Ensure container doesn't expand beyond parent */
   max-height: 100%;
   overflow: hidden;
-  /* Ensure bottom border radius is applied to clip children */
+  /* Match modal background for seamless appearance */
+  background: var(--glass-bg-modal);
+  /* Bottom border radius to match parent modal */
   border-bottom-left-radius: var(--radius-xl);
   border-bottom-right-radius: var(--radius-xl);
 }
 
-/* Scrollable body area within modal container */
+/* Scrollable body: Takes available space and scrolls independently */
 .glass-modal-container > .glass-modal-body {
-  flex: 1;
+  /* Take all available vertical space */
+  flex: 1 1 auto;
+  /* Critical: Allow shrinking in flex container */
   min-height: 0;
+  /* Enable vertical scrolling only in body */
   overflow-y: auto;
   overflow-x: hidden;
-  /* Add padding-bottom to prevent content touching footer */
-  padding-bottom: var(--space-4);
+  /* Consistent padding */
+  padding: var(--space-5);
+  /* 自定义滚动条样式 */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
-/* Fixed footer at bottom of modal container */
+/* Webkit 滚动条样式 */
+.glass-modal-container > .glass-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.glass-modal-container > .glass-modal-body::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.glass-modal-container > .glass-modal-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+}
+
+.glass-modal-container > .glass-modal-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Fixed footer: Always visible at bottom, never scrolls */
 .glass-modal-container > .glass-modal-footer {
-  flex-shrink: 0;
+  /* Prevent footer from growing or shrinking */
+  flex: 0 0 auto;
+  /* Ensure footer stays at bottom */
   margin-top: auto;
-  /* Add padding to prevent content touching edges */
-  padding: var(--space-4) var(--space-5) var(--space-5);
-  /* Ensure bottom border radius is visible - matches modal radius */
+  /* Visual styling */
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--glass-border-default);
+  background: var(--glass-bg-modal);
+  /* Bottom border radius for rounded corners */
   border-bottom-left-radius: var(--radius-xl);
   border-bottom-right-radius: var(--radius-xl);
-  /* Add background to match modal for proper rounded corner appearance */
-  background: var(--glass-bg-modal);
-  /* Ensure footer is above scrollable content */
+  /* Ensure footer is above scrolled content */
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .glass-modal-xl {

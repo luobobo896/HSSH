@@ -191,7 +191,7 @@ export function Portal() {
   };
 
   return (
-    <div className="space-y-5 animate-fade-in-up">
+    <div className="space-y-5">
       {/* Header */}
       <div>
         <div className="mb-5">

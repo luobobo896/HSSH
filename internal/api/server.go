@@ -152,7 +152,33 @@ func (s *Server) RegisterRoutes(mux *http.ServeMux) {
 	if err != nil {
 		log.Printf("Warning: failed to load embedded web assets: %v", err)
 	} else {
-		mux.Handle("/", http.FileServer(http.FS(staticFS)))
+		mux.Handle("/", s.staticFileHandler(staticFS))
+	}
+}
+
+// staticFileHandler 处理静态文件请求，支持/HSSH/基础路径
+func (s *Server) staticFileHandler(content fs.FS) http.HandlerFunc {
+	fileServer := http.FileServer(http.FS(content))
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		// 移除 /HSSH 前缀
+		path := r.URL.Path
+		if strings.HasPrefix(path, "/HSSH") {
+			path = path[len("/HSSH"):]
+			if path == "" {
+				path = "/"
+			}
+			r.URL.Path = path
+		}
+
+		// 设置正确的 MIME 类型
+		if strings.HasSuffix(path, ".css") {
+			w.Header().Set("Content-Type", "text/css")
+		} else if strings.HasSuffix(path, ".js") {
+			w.Header().Set("Content-Type", "application/javascript")
+		}
+
+		fileServer.ServeHTTP(w, r)
 	}
 }
 
